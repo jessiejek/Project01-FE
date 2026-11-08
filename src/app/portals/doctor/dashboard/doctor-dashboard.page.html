@@ -1,22 +1,26 @@
 
-    <div class="page-loading" *ngIf="isLoading">
+    <div class="page-loading" *ngIf="isLoading" role="status" aria-label="Loading doctor dashboard">
       <ion-spinner name="crescent"></ion-spinner>
     </div>
 
     <ng-container *ngIf="!isLoading">
       <ng-container *ngIf="doctor; else errorState">
         <div class="dash">
+          <div *ngIf="loadErrors.size > 0" class="banner banner--danger" role="alert">
+            <span>Some dashboard information could not be loaded. Missing totals are not shown.</span>
+            <button type="button" class="btn-outline" (click)="loadDashboard()">Try again</button>
+          </div>
           <div class="dh">
             <div>
               <h1 class="dt">{{ greeting }}, Dr. {{ doctor.fullName.split(' ')[0] || 'Doctor' }}</h1>
               <p class="ds">{{ greetingSubtitle }}</p>
             </div>
-            <span class="sp" [class.sa]="todayStatus === 'Available'" [class.sl]="todayStatus === 'RunningLate'" [class.su]="todayStatus === 'UnavailableToday'">
+            <span *ngIf="!loadErrors.has('availability')" class="sp" [class.sa]="todayStatus === 'Available'" [class.sl]="todayStatus === 'RunningLate'" [class.su]="todayStatus === 'UnavailableToday'">
               {{ todayStatus === 'RunningLate' ? 'Running Late' : todayStatus === 'UnavailableToday' ? 'Unavailable Today' : 'Available' }}
             </span>
           </div>
 
-          <div class="np-banner" *ngIf="nextPatient as next">
+          <div class="np-banner" *ngIf="!loadErrors.has('queue') && nextPatient as next">
             <div class="np-banner__main">
               <app-avatar [name]="next.patientName || 'Patient'" size="lg"></app-avatar>
               <div class="np-banner__copy">
@@ -33,7 +37,7 @@
             </div>
           </div>
 
-          <div class="stats-grid">
+          <div class="stats-grid" *ngIf="!loadErrors.has('queue')">
             <app-stat-card color="primary" label="Booked Today" [value]="summary?.bookedToday ?? 0"></app-stat-card>
             <app-stat-card label="Waiting" [value]="summary?.waiting ?? 0"></app-stat-card>
             <app-stat-card label="Checked In" [value]="summary?.checkedIn ?? 0"></app-stat-card>
@@ -41,7 +45,7 @@
           </div>
 
           <div class="m">
-            <div class="qs">
+            <div class="qs" *ngIf="!loadErrors.has('queue')">
               <div class="sh">
                 <h2>Today's Queue</h2>
                 <span class="sc">{{ queueItems.length }} patient(s)</span>
@@ -73,17 +77,18 @@
             <div class="ss">
               <div class="clinic-card">
                 <div class="sh"><h2>Availability</h2></div>
-                <div class="aa">
-                  <button class="ab ab--available" [class.active]="todayStatus === 'Available'" (click)="updateStatus('Available')">Mark Available</button>
+                <p *ngIf="savingStatus" role="status">Saving availability…</p>
+                <div class="aa" [attr.aria-busy]="savingStatus">
+                  <button class="ab ab--available" [disabled]="savingStatus" [class.active]="todayStatus === 'Available'" (click)="updateStatus('Available')">Mark Available</button>
                   <div class="rr">
                     <input class="fi2" type="number" min="5" [(ngModel)]="runningLateMinutes" />
-                    <button class="ab ab--late" [class.active]="todayStatus === 'RunningLate'" [disabled]="runningLateMinutes < 5" (click)="updateStatus('RunningLate')">Running Late</button>
+                    <button class="ab ab--late" [class.active]="todayStatus === 'RunningLate'" [disabled]="savingStatus || runningLateMinutes < 5" (click)="updateStatus('RunningLate')">Running Late</button>
                   </div>
-                  <button class="ab ab--unavailable" [class.active]="todayStatus === 'UnavailableToday'" (click)="updateStatus('UnavailableToday')">Unavailable Today</button>
+                  <button class="ab ab--unavailable" [disabled]="savingStatus" [class.active]="todayStatus === 'UnavailableToday'" (click)="updateStatus('UnavailableToday')">Unavailable Today</button>
                 </div>
               </div>
 
-              <div class="clinic-card">
+              <div class="clinic-card" *ngIf="!loadErrors.has('schedule')">
                 <div class="sh"><h2>Working Schedule</h2></div>
                 <div class="sl2" *ngIf="schedule.length > 0; else noSchedule">
                   <div class="sr2 sr2--today" *ngIf="todaySchedule as today">
@@ -129,4 +134,3 @@
     <ng-template #errorState>
       <app-empty-state icon="medical-outline" title="Unable to load dashboard" description="We could not load your doctor profile." ctaLabel="Retry" (ctaClick)="loadDashboard()"></app-empty-state>
     </ng-template>
-  

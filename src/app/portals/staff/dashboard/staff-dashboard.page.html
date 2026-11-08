@@ -7,16 +7,24 @@
         </div>
       </div>
 
-      <div class="stats-grid">
-        <app-stat-card color="primary" label="Today's Appointments" [value]="todaysAppointmentsCount" icon="calendar-outline"></app-stat-card>
-        <app-stat-card [color]="completedUnpaidCount > 0 ? 'danger' : 'neutral'" label="Ready for Payment" [value]="completedUnpaidCount" [badgeLabel]="completedUnpaidCount > 0 ? 'Collect payment' : undefined" icon="cash-outline"></app-stat-card>
-        <app-stat-card label="Walk-Ins Today" [value]="walkInsTodayCount"></app-stat-card>
-        <app-stat-card label="Checked In Today" [value]="confirmedTodayCount"></app-stat-card>
+      <div *ngIf="bookingsError || doctorsError" class="banner banner--danger" role="alert">
+        <span>Some queue information could not be loaded.</span>
+        <button type="button" class="btn-outline" (click)="refreshDashboardData()">Try again</button>
+      </div>
+      <p *ngIf="actionError" class="banner banner--danger" role="alert">{{ actionError }}</p>
+      <p *ngIf="actionMessage" class="feedback-message" role="status">{{ actionMessage }}</p>
+      <p *ngIf="pendingActionId" role="status">Updating check-in…</p>
+      <div class="stats-grid" *ngIf="!bookingsError">
+        <app-stat-card [loading]="isLoading" color="primary" label="Today's Appointments" [value]="todaysAppointmentsCount" icon="calendar-outline"></app-stat-card>
+        <app-stat-card [loading]="isLoading" [color]="completedUnpaidCount > 0 ? 'danger' : 'neutral'" label="Ready for Payment" [value]="completedUnpaidCount" [badgeLabel]="completedUnpaidCount > 0 ? 'Collect payment' : undefined" icon="cash-outline"></app-stat-card>
+        <app-stat-card [loading]="isLoading" label="Walk-Ins Today" [value]="walkInsTodayCount"></app-stat-card>
+        <app-stat-card [loading]="isLoading" label="Checked In Today" [value]="confirmedTodayCount"></app-stat-card>
       </div>
 
-      <div
+      <button
+        type="button"
         class="banner banner--danger"
-        *ngIf="completedUnpaidCount > 0"
+        *ngIf="!isLoading && !bookingsError && completedUnpaidCount > 0"
         (click)="goToPaymentQueue()"
       >
         <ion-icon name="cash-outline"></ion-icon>
@@ -24,15 +32,15 @@
           {{ completedUnpaidCount }} completed consultation(s) are ready for payment collection.
           <strong>Go to Payment Queue &rarr;</strong>
         </span>
-      </div>
+      </button>
 
-      <div class="clinic-card queue-card">
+      <div class="clinic-card queue-card" *ngIf="!bookingsError">
         <div class="queue-card__header">
           <div>
             <div class="section-heading">Today's Queue</div>
             <p class="queue-card__subtitle">Booked and confirmed patients waiting for staff actions.</p>
           </div>
-          <div class="queue-card__meta">
+          <div class="queue-card__meta" *ngIf="!isLoading">
             <span>{{ walkInsTodayCount }} walk-ins</span>
             <span>{{ confirmedTodayCount }} confirmed</span>
           </div>
@@ -41,10 +49,9 @@
           [bookings]="todaysBookings"
           [doctors]="doctors"
           [patients]="patients"
-          [isLoading]="isLoading"
+          [isLoading]="isLoading || !!pendingActionId"
           (rowClicked)="openBooking($event)"
           (actionTaken)="onQueueAction($event)"
         ></app-queue-table>
       </div>
     </section>
-  

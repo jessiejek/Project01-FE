@@ -36,6 +36,8 @@ export class DoctorDashboardPage implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   isLoading = true;
+  savingStatus = false;
+  readonly loadErrors = new Set<string>();
   doctor: Doctor | null = null;
   summary: { bookedToday: number; waiting: number; checkedIn: number; completed: number } | null = null;
   queueItems: Booking[] = [];
@@ -120,6 +122,7 @@ export class DoctorDashboardPage implements OnInit {
 
   loadDashboard(): void {
     this.isLoading = true;
+    this.loadErrors.clear();
     this.apiService.get<any>('doctors/me').pipe(
       map((data) => {
         if (!data) {
@@ -151,11 +154,11 @@ export class DoctorDashboardPage implements OnInit {
                 })
               );
             }),
-            catchError(() => of(null))
+            catchError(() => { this.loadErrors.add('queue'); return of(null); })
           ),
           schedule: this.apiService.get<any[]>('doctors/' + doc.id + '/schedule').pipe(
             map((data) => ((data ?? []) as Record<string, unknown>[]).map(mapDoctorScheduleRow)),
-            catchError(() => of([] as DoctorSchedule[]))
+            catchError(() => { this.loadErrors.add('schedule'); return of([] as DoctorSchedule[]); })
           ),
           dayStatus: this.apiService.get<any[]>('doctors/' + doc.id + '/day-status').pipe(
             map((data) => {
@@ -166,11 +169,11 @@ export class DoctorDashboardPage implements OnInit {
                 ? mapDoctorDayStatusRow(match)
                 : { id: '', doctorId: doc.id, date: today, status: 'Available' as AvailabilityStatus };
             }),
-            catchError(() => of(null as DoctorDayStatus | null))
+            catchError(() => { this.loadErrors.add('availability'); return of(null as DoctorDayStatus | null); })
           )
         });
       }),
-      catchError(() => of(null)),
+      catchError(() => { this.doctor = null; return of(null); }),
       finalize(() => (this.isLoading = false)),
       takeUntilDestroyed(this.destroyRef)
     ).subscribe((result) => {
@@ -183,18 +186,22 @@ export class DoctorDashboardPage implements OnInit {
   }
 
   updateStatus(status: AvailabilityStatus): void {
-    if (!this.doctor) return;
+    if (!this.doctor || this.savingStatus) return;
+    this.savingStatus = true;
     this.apiService.post<any>('doctors/' + this.doctor.id + '/day-status', {
       date: this.todayStr(),
       status,
       runningLateMinutes: status === 'RunningLate' ? this.runningLateMinutes : null
     }).pipe(
       map((data) => mapDoctorDayStatusRow((data ?? {}) as Record<string, unknown>)),
-      catchError(() => { this.showToast('Failed to update status.', 'danger'); return of(null); })
+      catchError(() => { this.showToast('Failed to update status.', 'danger'); return of(null); }),
+      finalize(() => this.savingStatus = false),
+      takeUntilDestroyed(this.destroyRef)
     )
       .subscribe((res) => {
         if (!res) return;
         this.todayStatus = res.status as AvailabilityStatus;
+        this.loadErrors.delete('availability');
         this.showToast(`Status: ${this.label(status)}`, 'success');
       });
   }

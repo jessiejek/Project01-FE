@@ -34,7 +34,12 @@ export class StaffDashboardPage implements OnInit {
   todaysBookings: Booking[] = [];
   doctors: Doctor[] = [];
   patients: Patient[] = [];
-  bookingsLoading = false;
+  bookingsLoading = true;
+  bookingsError = false;
+  doctorsError = false;
+  pendingActionId: string | null = null;
+  actionError = '';
+  actionMessage = '';
   doctorsLoading = false;
   patientsLoading = false;
 
@@ -116,51 +121,59 @@ export class StaffDashboardPage implements OnInit {
   }
 
   onQueueAction(event: { action: string; bookingId: string }): void {
-    switch (event.action) {
-      case 'check-in':
-        this.apiService.patch('bookings/' + event.bookingId + '/check-in', {}).subscribe();
-        break;
-      case 'undo-check-in':
-        this.apiService.patch('bookings/' + event.bookingId + '/undo-check-in', {}).subscribe();
-        break;
-      case 'collect-payment':
-        void this.goToPaymentQueue();
-        break;
-    }
+    if (event.action === 'collect-payment') { this.goToPaymentQueue(); return; }
+    if (this.pendingActionId || !['check-in', 'undo-check-in'].includes(event.action)) return;
+    this.pendingActionId = event.bookingId;
+    this.actionError = '';
+    this.actionMessage = '';
+    this.apiService.patch('bookings/' + event.bookingId + '/' + event.action, {}).pipe(
+      finalize(() => this.pendingActionId = null),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: () => {
+        this.actionMessage = event.action === 'check-in' ? 'Patient checked in.' : 'Check-in undone.';
+        this.loadTodaysBookings();
+      },
+      error: () => this.actionError = 'Check-in could not be updated. Please try again.'
+    });
   }
 
   private refreshDashboardBookings(): void {
     this.loadTodaysBookings();
   }
 
-  private refreshDashboardData(): void {
+  refreshDashboardData(): void {
     this.loadTodaysBookings();
     this.loadDoctors();
     this.patientState.refresh();
   }
 
   private loadTodaysBookings(): void {
+    this.bookingsError = false;
+    this.bookingsLoading = true;
     this.bookingService
       .getStaffTodayBookings({ page: 1, pageSize: 500 })
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(finalize(() => this.bookingsLoading = false), takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (result) => {
           this.todaysBookings = result.items;
         },
         error: () => {
+          this.bookingsError = true;
           this.todaysBookings = [];
         }
       });
   }
 
   private loadDoctors(): void {
+    this.doctorsError = false;
     this.doctorState.setLoading(true);
     this.apiService
       .get<any[]>('doctors')
       .pipe(
         map((rows) => this.doctorState.normalizeDoctorRows(rows)),
         catchError((error: unknown) => {
-          console.warn('Failed to load doctors:', error);
+          this.doctorsError = true;
           return of([] as Doctor[]);
         }),
         finalize(() => this.doctorState.setLoading(false)),

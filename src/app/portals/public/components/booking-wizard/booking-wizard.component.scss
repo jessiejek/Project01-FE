@@ -116,3 +116,5 @@
     line-height: 1.2;
   }
 }
+
+.wizard-step--completed .wizard-step__circle { animation: feedbackReveal 180ms ease-out; }

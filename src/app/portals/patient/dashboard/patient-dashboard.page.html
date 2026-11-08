@@ -1,8 +1,12 @@
+<div *ngIf="loadErrors.size > 0" class="banner banner--danger" role="alert">
+  <span>Some information could not be loaded. Incomplete totals are hidden.</span>
+  <button type="button" class="btn-outline" (click)="retryDashboard()">Try again</button>
+</div>
 
     <section class="page-shell" *ngIf="vm$ | async as vm; else loadingTpl">
             <div class="dashboard-hero">
         <div class="dashboard-hero__content">
-              <h2 class="page-title">Welcome back, {{ vm.patient?.firstName || getWelcomeName(vm.user) || 'Juan' }}</h2>
+              <h2 class="page-title">Welcome back, {{ vm.patient?.firstName || getWelcomeName(vm.user) || 'there' }}</h2>
           <p class="page-subtitle">View your appointments, documents, prescriptions, and medical records in one place.</p>
           <div class="dashboard-hero__actions">
             <button type="button" class="btn-primary" routerLink="/patient/doctors">
@@ -33,6 +37,7 @@
         </div>
       </div>
 
+      <ng-container *ngIf="!loadErrors.has('profile') && !loadErrors.has('appointments')">
       <div class="dashboard-section" *ngIf="vm.latestBooking; else noUpcomingTpl">
         <app-upcoming-appointment-card
           [booking]="vm.latestBooking"
@@ -53,14 +58,16 @@
         ></app-empty-state>
       </ng-template>
 
-      <div class="stats-grid">
+      </ng-container>
+      <div class="stats-grid" *ngIf="loadErrors.size === 0">
         <app-stat-card color="primary" label="Upcoming Appointments" [value]="vm.upcomingCount" icon="calendar-outline"></app-stat-card>
         <app-stat-card [color]="vm.pendingProofCount > 0 ? 'warning' : 'neutral'" label="Pending Payment Proof" [value]="vm.pendingProofCount" icon="receipt-outline"></app-stat-card>
         <app-stat-card label="Completed Visits" [value]="vm.completedVisitCount" icon="checkmark-circle-outline"></app-stat-card>
         <app-stat-card label="Active Prescriptions" [value]="vm.activePrescriptionCount" icon="medkit-outline"></app-stat-card>
       </div>
 
-            <div class="dashboard-section">
+      <p *ngIf="(doctorsLoading$ | async) === true" role="status">Loading doctors…</p>
+      <div class="dashboard-section" *ngIf="!loadErrors.has('doctors') && (doctorsLoading$ | async) !== true">
         <div class="section-heading section-heading--with-action">
           <span>Book With a Doctor</span>
           <a class="section-action-link" routerLink="/patient/doctors">View all doctors &rarr;</a>
@@ -80,7 +87,7 @@
       </div>
 
       <div class="dashboard-grid">
-        <div class="dashboard-panel">
+        <div class="dashboard-panel" *ngIf="!loadErrors.has('profile') && !loadErrors.has('medical records')">
           <div class="section-heading">Recent Medical Records</div>
           <ng-container *ngIf="vm.recentConsultations.length > 0; else noRecordsTpl">
             <app-medical-record-card
@@ -99,7 +106,7 @@
           </ng-template>
         </div>
 
-        <div class="dashboard-panel">
+        <div class="dashboard-panel" *ngIf="!loadErrors.has('profile') && !loadErrors.has('prescriptions')">
           <div class="section-heading">Recent Prescriptions</div>
           <ng-container *ngIf="vm.recentPrescriptions.length > 0; else noRxTpl">
             <app-prescription-card
@@ -120,7 +127,8 @@
       </div>
     </section>
   <ng-template #loadingTpl>
-      <div class="dashboard-loading">
+      <div class="dashboard-loading" role="status" aria-label="Loading your dashboard">
+        <span class="sr-only">Loading your dashboard…</span>
         <div class="skel-hero"></div>
         <div class="skel-stats">
           <div class="skel-stat"></div>
@@ -134,4 +142,3 @@
         </div>
       </div>
     </ng-template>
-  

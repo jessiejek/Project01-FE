@@ -1,46 +1,55 @@
+<app-hero-section />
+<ng-container *ngIf="settings$ | async as settings">
+  <app-operating-hours-bar [settings]="settings" />
+</ng-container>
 
-    <app-hero-section />
-    <ng-container *ngIf="settings$ | async as settings">
-      <app-operating-hours-bar [settings]="settings" />
+<section class="home-section" aria-labelledby="doctors-heading">
+  <div class="content-container" *ngIf="doctorsState$ | async as state">
+    <h2 class="section-title" id="doctors-heading">Choose Your Doctor</h2>
+    <p class="section-subtitle">Review providers and consultation fees before booking.</p>
+    <div class="doctors-grid" *ngIf="state.status === 'loading'" role="status" aria-label="Loading doctors">
+      <span class="sr-only">Loading doctors…</span>
+      <app-skeleton *ngFor="let item of [1, 2, 3]" variant="card" aria-hidden="true"></app-skeleton>
+    </div>
+    <app-empty-state *ngIf="state.status === 'error'" title="Doctors could not be loaded" description="Please try again to see the clinic's providers." ctaLabel="Try again" (ctaClick)="retry()"></app-empty-state>
+    <ng-container *ngIf="state.status === 'ready'">
+      <div class="doctors-grid" *ngIf="state.data.length > 0; else noDoctors">
+        <app-doctor-card *ngFor="let doc of state.data" [doctor]="doc"></app-doctor-card>
+      </div>
+      <ng-template #noDoctors><app-empty-state title="No doctors listed yet" description="Provider information will appear here when available."></app-empty-state></ng-template>
+      <div class="view-all-link" *ngIf="state.data.length > 0"><a routerLink="/public/doctors" class="btn-outline">View All Doctors</a></div>
     </ng-container>
+  </div>
+</section>
 
-    <section class="home-section">
-      <div class="content-container">
-        <h2 class="section-title">Choose Your Doctor</h2>
-        <p class="section-subtitle">Experienced professionals dedicated to your health</p>
-        <div class="doctors-grid" *ngIf="doctors$ | async as doctors">
-          <app-doctor-card *ngFor="let doc of doctors" [doctor]="doc"></app-doctor-card>
-        </div>
-        <div class="view-all-link">
-          <a routerLink="/public/doctors" class="btn-outline">View All Doctors →</a>
-        </div>
+<section class="home-section home-section--alt" aria-labelledby="services-heading">
+  <div class="content-container" *ngIf="servicesState$ | async as state">
+    <h2 class="section-title" id="services-heading">Clinic Services</h2>
+    <div class="services-grid" *ngIf="state.status === 'loading'" role="status" aria-label="Loading services">
+      <span class="sr-only">Loading services…</span>
+      <app-skeleton *ngFor="let item of [1, 2, 3, 4]" variant="card" aria-hidden="true"></app-skeleton>
+    </div>
+    <app-empty-state *ngIf="state.status === 'error'" title="Services could not be loaded" description="Please try again to review clinic services." ctaLabel="Try again" (ctaClick)="retry()"></app-empty-state>
+    <ng-container *ngIf="state.status === 'ready'">
+      <div class="services-grid" *ngIf="state.data.length > 0; else noServices">
+        <app-service-category-card *ngFor="let row of categoryRows" [category]="row.key" [count]="countFor(state.data, row.key)" [description]="row.description" (selected)="onCategorySelect($event)" />
       </div>
-    </section>
+      <ng-template #noServices><app-empty-state title="No services listed yet" description="Clinic services will appear here when available."></app-empty-state></ng-template>
+    </ng-container>
+  </div>
+</section>
 
-    <section class="home-section home-section--alt">
-      <div class="content-container">
-        <h2 class="section-title">Clinic Services</h2>
-        <div class="services-grid" *ngIf="services$ | async as services">
-          <app-service-category-card
-            *ngFor="let row of categoryRows"
-            [category]="row.key"
-            [count]="countFor(services, row.key)"
-            [description]="row.description"
-            (selected)="onCategorySelect($event)"
-          />
-        </div>
-      </div>
-    </section>
-
-    <section class="home-section">
-      <div class="content-container">
-        <h2 class="section-title">Clinic Announcements</h2>
-        <div class="announcements-grid" *ngIf="announcements$ | async as announcements">
-          <app-announcement-card
-            *ngFor="let ann of announcements.slice(0, 3)"
-            [announcement]="ann"
-          />
-        </div>
-      </div>
-    </section>
-  
+<section class="home-section" aria-labelledby="announcements-heading">
+  <div class="content-container" *ngIf="announcementsState$ | async as state">
+    <h2 class="section-title" id="announcements-heading">Clinic Announcements</h2>
+    <div class="announcements-grid" *ngIf="state.status === 'loading'" role="status" aria-label="Loading announcements">
+      <span class="sr-only">Loading announcements…</span>
+      <app-skeleton *ngFor="let item of [1, 2, 3]" variant="card" aria-hidden="true"></app-skeleton>
+    </div>
+    <app-empty-state *ngIf="state.status === 'error'" title="Announcements could not be loaded" description="Please try again for the latest clinic updates." ctaLabel="Try again" (ctaClick)="retry()"></app-empty-state>
+    <ng-container *ngIf="state.status === 'ready'">
+      <div class="announcements-grid" *ngIf="state.data.length > 0; else noAnnouncements"><app-announcement-card *ngFor="let ann of state.data.slice(0, 3)" [announcement]="ann" /></div>
+      <ng-template #noAnnouncements><app-empty-state title="No announcements right now" description="Clinic updates will appear here."></app-empty-state></ng-template>
+    </ng-container>
+  </div>
+</section>

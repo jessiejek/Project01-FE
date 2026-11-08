@@ -7,21 +7,26 @@
         </div>
       </div>
 
-      <div class="stats-grid">
-        <app-stat-card color="primary" icon="calendar-outline" label="Today's Appointments" [value]="todayAppointmentsCount"></app-stat-card>
-        <app-stat-card color="neutral" icon="stats-chart-outline" label="Monthly Appointments" [value]="monthlyAppointmentsCount"></app-stat-card>
-        <app-stat-card color="neutral" icon="cash-outline" label="Revenue Today" [value]="(revenueToday | currency:'PHP':'symbol-narrow':'1.0-0') || 'PHP 0'"></app-stat-card>
-        <app-stat-card [color]="pendingVerificationCount > 0 ? 'warning' : 'neutral'" icon="alert-circle-outline" label="Pending Verifications" [value]="pendingVerificationCount" [badgeLabel]="pendingVerificationCount > 0 ? 'Action Required' : undefined"></app-stat-card>
-        <app-stat-card color="neutral" icon="time-outline" label="On Hold Bookings" [value]="onHoldCount"></app-stat-card>
-        <app-stat-card [color]="unpaidCompletedCount > 0 ? 'danger' : 'neutral'" icon="warning-outline" label="Unpaid Completed" [value]="unpaidCompletedCount" [badgeLabel]="unpaidCompletedCount > 0 ? 'Collect Payment' : undefined"></app-stat-card>
-        <app-stat-card color="neutral" icon="person-remove-outline" label="No Shows Today" [value]="noShowCount"></app-stat-card>
-        <app-stat-card color="neutral" icon="calendar-outline" label="Follow-Ups (7 days)" [value]="followUpsCount"></app-stat-card>
+      <div *ngIf="hasLoadError" class="banner banner--danger" role="alert">
+        <span>Dashboard information could not be loaded. Please try again.</span>
+        <button class="btn-outline" type="button" (click)="loadDashboard()">Try again</button>
+      </div>
+      <p *ngIf="isLoading" class="sr-only" role="status">Loading dashboard…</p>
+      <div class="stats-grid" *ngIf="!hasLoadError">
+        <app-stat-card [loading]="isLoading" color="primary" icon="calendar-outline" label="Today's Appointments" [value]="todayAppointmentsCount"></app-stat-card>
+        <app-stat-card [loading]="isLoading" color="neutral" icon="stats-chart-outline" label="Monthly Appointments" [value]="monthlyAppointmentsCount"></app-stat-card>
+        <app-stat-card [loading]="isLoading" color="neutral" icon="cash-outline" label="Revenue Today" [value]="(revenueToday | currency:'PHP':'symbol-narrow':'1.0-0') || 'PHP 0'"></app-stat-card>
+        <app-stat-card [loading]="isLoading" [color]="pendingVerificationCount > 0 ? 'warning' : 'neutral'" icon="alert-circle-outline" label="Pending Verifications" [value]="pendingVerificationCount" [badgeLabel]="pendingVerificationCount > 0 ? 'Action Required' : undefined"></app-stat-card>
+        <app-stat-card [loading]="isLoading" color="neutral" icon="time-outline" label="On Hold Bookings" [value]="onHoldCount"></app-stat-card>
+        <app-stat-card [loading]="isLoading" [color]="unpaidCompletedCount > 0 ? 'danger' : 'neutral'" icon="warning-outline" label="Unpaid Completed" [value]="unpaidCompletedCount" [badgeLabel]="unpaidCompletedCount > 0 ? 'Collect Payment' : undefined"></app-stat-card>
+        <app-stat-card [loading]="isLoading" color="neutral" icon="person-remove-outline" label="No Shows Today" [value]="noShowCount"></app-stat-card>
       </div>
 
-      <div class="chart-grid">
+      <div class="chart-grid" *ngIf="!isLoading && !hasLoadError">
         <div class="clinic-card">
           <div class="section-heading">Most Booked Doctors</div>
-          <div class="chart-card chart-card--bar">
+          <p *ngIf="topDoctorStats.length === 0" class="page-subtitle">No bookings recorded for this month.</p>
+          <div class="chart-card chart-card--bar" *ngIf="topDoctorStats.length > 0">
             <div class="bar-row" *ngFor="let item of topDoctorStats">
               <div class="bar-row__label">{{ item.label }}</div>
               <div class="bar-row__track">
@@ -38,7 +43,7 @@
         </div>
       </div>
 
-      <div class="clinic-card">
+      <div class="clinic-card" *ngIf="!hasLoadError">
         <div class="section-heading">Today's Appointments</div>
         <app-today-appointments-table
           [bookings]="todaysBookings"
@@ -51,4 +56,3 @@
         ></app-today-appointments-table>
       </div>
     </section>
-  

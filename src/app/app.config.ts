@@ -48,7 +48,7 @@ export const appConfig: ApplicationConfig = {
       provide: DATE_PIPE_DEFAULT_OPTIONS,
       useValue: { dateFormat: 'MMMM d, y (EEE)' }
     },
-    provideIonicAngular(),
+    provideIonicAngular({ animated: typeof window === 'undefined' || !window.matchMedia('(prefers-reduced-motion: reduce)').matches }),
     provideHttpClient(withInterceptors([authInterceptor])),
     provideRouter(routes)
   ]

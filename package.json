@@ -15,7 +15,8 @@
     "test:e2e:staff:headed": "playwright test tests/staff --headed",
     "test:e2e:staff:debug": "playwright test tests/staff --debug",
     "test:e2e:report": "playwright show-report",
-    "test:design": "node scripts/check-design-system.cjs"
+    "test:design": "node scripts/check-design-system.cjs",
+    "test:ui:offline": "node scripts/design-ui-smoke.cjs"
   },
   "private": true,
   "dependencies": {

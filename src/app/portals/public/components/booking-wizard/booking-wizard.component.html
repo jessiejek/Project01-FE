@@ -7,6 +7,7 @@
           [class.wizard-step--completed]="currentStep > s.step"
           [class.wizard-step--active]="currentStep === s.step"
           [class.wizard-step--upcoming]="currentStep < s.step"
+          [attr.aria-current]="currentStep === s.step ? 'step' : null"
         >
           <div class="wizard-step__circle">
             <ion-icon name="checkmark" *ngIf="currentStep > s.step"></ion-icon>

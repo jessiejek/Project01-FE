@@ -1,3 +1,7 @@
+import { BehaviorSubject, Observable, catchError, of, shareReplay, switchMap } from 'rxjs';
+import { LoadState, loadState } from '../../../shared/utils/load-state';
+import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
+import { SkeletonComponent } from '../../../shared/components/skeleton/skeleton.component';
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
@@ -13,7 +17,7 @@ import { ServiceCategoryCardComponent } from '../components/service-category-car
   selector: 'app-home-page',
   standalone: true,
   imports: [
-    NgIf,
+    NgIf, EmptyStateComponent, SkeletonComponent,
     NgFor,
     AsyncPipe,
     RouterLink,
@@ -30,10 +34,22 @@ export class HomePage {
   private readonly apiService = inject(ApiService);
   private readonly router = inject(Router);
 
-  readonly doctors$ = this.apiService.get<any[]>('doctors');
-  readonly services$ = this.apiService.get<any[]>('services');
-  readonly announcements$ = this.apiService.get<any[]>('announcements');
-  readonly settings$ = this.apiService.get<any>('settings');
+  private readonly reload$ = new BehaviorSubject<void>(undefined);
+  readonly doctorsState$ = this.collectionState('doctors');
+  readonly servicesState$ = this.collectionState('services');
+  readonly announcementsState$ = this.collectionState('announcements');
+  readonly settings$ = this.reload$.pipe(
+    switchMap(() => this.apiService.get<any>('settings').pipe(catchError(() => of(null))))
+  );
+
+  retry(): void { this.reload$.next(); }
+
+  private collectionState(endpoint: string): Observable<LoadState<any[]>> {
+    return this.reload$.pipe(
+      switchMap(() => loadState(() => this.apiService.get<any[]>(endpoint), [])),
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
+  }
 
   readonly categoryRows: { key: ServiceCategory; description: string }[] = [
     {

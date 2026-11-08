@@ -1,5 +1,5 @@
 /* Design System — Phase 1 */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+/* Native font stacks keep the interface usable offline without remote CSS imports. */
 @import 'global';
 
 /* Ionic core + utilities */
@@ -91,8 +91,8 @@ ion-app, ion-content {
   --gradient-subtle: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
 
   /* TYPOGRAPHY */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
   --text-base: 1rem;
@@ -296,7 +296,7 @@ button,
 a,
 ion-item,
 .clickable {
-  transition: all var(--transition-base);
+  transition: background-color var(--transition-base), color var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
 }
 
 a,
@@ -306,7 +306,7 @@ button,
 }
 
 .page-enter {
-  animation: fadeSlideUp 300ms var(--transition-slow) both;
+  animation: fadeSlideUp 300ms ease-out both;
 }
 .page-enter-active {
   animation: fadeSlideUp 250ms ease-out both;
@@ -352,7 +352,7 @@ button,
 
   &:hover {
     box-shadow: var(--shadow-md);
-    transform: translateY(-1px);
+
   }
 }
 
@@ -479,7 +479,7 @@ button,
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  color: var(--clinic-text-primary); /* use dark text for contrast */
+  color: var(--clinic-text-inverse); /* glass variant is used on the dark hero */
 }
 
 .mobile-card {
@@ -495,7 +495,7 @@ button,
 
 .mobile-card:hover {
   box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
+
 }
 
 .mobile-card__header {
@@ -581,7 +581,7 @@ button,
   letter-spacing: 0.01em;
   box-shadow: var(--shadow-sm);
   cursor: pointer;
-  transition: all var(--transition-base);
+  transition: background-color var(--transition-base), color var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
 
   &:hover {
     box-shadow: var(--shadow-green);
@@ -611,7 +611,7 @@ button,
   padding: var(--space-3) var(--space-6);
   font-size: var(--text-sm);
   font-weight: var(--font-semibold);
-  transition: all var(--transition-base);
+  transition: background-color var(--transition-base), color var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
 
   &:hover {
     background: var(--color-primary-50);
@@ -644,7 +644,7 @@ button,
   background: transparent;
   border: none;
   color: var(--clinic-text-muted);
-  transition: all var(--transition-base);
+  transition: background-color var(--transition-base), color var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
 
   &:hover {
     background: var(--color-neutral-100);
@@ -1035,7 +1035,7 @@ ion-item.clinic-input {
   font-weight: var(--font-semibold);
   font-family: var(--font-mono);
   cursor: pointer;
-  transition: all var(--transition-base);
+  transition: background-color var(--transition-base), color var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
   border: 1.5px solid transparent;
   user-select: none;
 
@@ -1467,4 +1467,18 @@ h1, h2, .page-title, .section-title { text-wrap: balance; }
 .stat-card__value, .data-number, .bar-row__value, .booking-timer,
 .receipt-view, .clinic-table td, .slot-cell, input[type='number'] {
   font-variant-numeric: tabular-nums;
+}
+
+/* Feedback describes a completed action rather than decorating idle cards. */
+.feedback-message { color: var(--clinic-text-success); font-size: var(--text-sm); animation: feedbackReveal 180ms ease-out; }
+@keyframes feedbackReveal { from { opacity: 0; } to { opacity: 1; } }
+button:disabled { cursor: not-allowed; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .skeleton, .skel-hero, .skel-stat, .skel-panel { animation: none !important; }
 }

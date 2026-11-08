@@ -30,7 +30,8 @@ export class DashboardPage extends BaseComponent implements OnInit {
   patients: any[] = [];
   services: any[] = [];
   todaysBookings: any[] = [];
-  isLoading = false;
+  isLoading = true;
+  hasLoadError = false;
 
   todayAppointmentsCount = 0;
   monthlyAppointmentsCount = 0;
@@ -39,7 +40,6 @@ export class DashboardPage extends BaseComponent implements OnInit {
   onHoldCount = 0;
   unpaidCompletedCount = 0;
   noShowCount = 0;
-  followUpsCount = 0;
   topDoctorStats: Array<{ label: string; value: number; max: number }> = [];
 
   ngOnInit(): void {
@@ -62,8 +62,9 @@ export class DashboardPage extends BaseComponent implements OnInit {
       });
   }
 
-  private loadDashboard(): void {
+  loadDashboard(): void {
     this.isLoading = true;
+    this.hasLoadError = false;
     const today = new Date().toISOString().slice(0, 10);
     const monthStart = today.slice(0, 7) + '-01';
 
@@ -132,6 +133,7 @@ export class DashboardPage extends BaseComponent implements OnInit {
     },
     error: () => {
       this.todaysBookings = [];
+      this.hasLoadError = true;
       this.isLoading = false;
     }
   });

@@ -6,7 +6,7 @@
   display: flex;
   align-items: center;
   padding: var(--space-12) var(--space-8);
-  padding-top: calc(64px + var(--space-12));
+  padding-top: var(--space-12);
 }
 
 
@@ -96,7 +96,7 @@
 @media (max-width: 640px) {
   .hero {
     min-height: unset;
-    padding-top: calc(64px + var(--space-6));
+    padding-top: var(--space-6);
     padding-bottom: var(--space-12);
     padding-left: max(var(--space-4), env(safe-area-inset-left));
     padding-right: max(var(--space-4), env(safe-area-inset-right));

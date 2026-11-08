@@ -5,7 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { calendarOutline, checkmarkCircleOutline, medkitOutline, receiptOutline } from 'ionicons/icons';
-import { catchError, combineLatest, finalize, map, of, switchMap } from 'rxjs';
+import { BehaviorSubject, catchError, combineLatest, finalize, map, of, shareReplay, switchMap, tap } from 'rxjs';
 import { AuthUser, Booking, Consultation, Doctor, Patient, Prescription } from '../../../core/models';
 import { ApiService } from '../../../core/services/api.service';
 import { AuthStateService } from '../../../core/services/auth-state.service';
@@ -71,11 +71,19 @@ export class PatientDashboardPage implements OnInit {
   private readonly medicalRecords = inject(MedicalRecordsService);
   private readonly router = inject(Router);
 
+  readonly loadErrors = new Set<string>();
+  private readonly reload$ = new BehaviorSubject<void>(undefined);
+
   readonly currentUser$ = this.authState.currentUser$;
-  readonly patient$ = this.currentUser$.pipe(
+  readonly patient$ = this.reload$.pipe(
+    switchMap(() => this.currentUser$),
     switchMap((user) =>
-      user ? this.apiService.get<any>('patients/me').pipe(catchError(() => of(undefined))) : of(undefined)
-    )
+      user ? this.apiService.get<any>('patients/me').pipe(
+        tap(() => this.loadErrors.delete('profile')),
+        catchError(() => { this.loadErrors.add('profile'); return of(undefined); })
+      ) : of(undefined)
+    ),
+    shareReplay({ bufferSize: 1, refCount: true })
   );
 
   readonly patientBookings$ = this.patient$.pipe(
@@ -86,10 +94,12 @@ export class PatientDashboardPage implements OnInit {
               mapDashboardBookings((data?.items ?? data ?? []) as Record<string, unknown>[], patient.id)
                 .filter((booking) => !booking.patientId || booking.patientId === patient.id)
             ),
-            catchError(() => of([] as Booking[]))
+            tap(() => this.loadErrors.delete('appointments')),
+            catchError(() => { this.loadErrors.add('appointments'); return of([] as Booking[]); })
           )
         : of([] as Booking[])
-    )
+    ),
+    shareReplay({ bufferSize: 1, refCount: true })
   );
 
   readonly upcomingBookings$ = this.patientBookings$.pipe(
@@ -119,6 +129,7 @@ export class PatientDashboardPage implements OnInit {
   );
 
   readonly doctors$ = this.doctorState.doctors$;
+  readonly doctorsLoading$ = this.doctorState.isLoading$;
 
   vm$ = combineLatest([
     this.currentUser$,
@@ -153,11 +164,13 @@ export class PatientDashboardPage implements OnInit {
       return combineLatest([
         this.apiService.get<any[]>('medical-records/consultations?patientId=' + patient.id).pipe(
           map((rows) => this.medicalRecords.mapConsultationRows(rows ?? [])),
-          catchError(() => of([] as Consultation[]))
+          tap(() => this.loadErrors.delete('medical records')),
+          catchError(() => { this.loadErrors.add('medical records'); return of([] as Consultation[]); })
         ),
         this.apiService.get<any[]>('medical-records/prescriptions?patientId=' + patient.id).pipe(
           map((rows) => this.medicalRecords.mapPrescriptionRows(rows ?? [])),
-          catchError(() => of([] as Prescription[]))
+          tap(() => this.loadErrors.delete('prescriptions')),
+          catchError(() => { this.loadErrors.add('prescriptions'); return of([] as Prescription[]); })
         ),
         this.clinicSettings.settings$
       ]).pipe(
@@ -207,6 +220,11 @@ export class PatientDashboardPage implements OnInit {
     })
   );
 
+  retryDashboard(): void {
+    this.reload$.next();
+    this.loadDoctors();
+  }
+
   ngOnInit(): void {
     this.loadDoctors();
   }
@@ -217,8 +235,9 @@ export class PatientDashboardPage implements OnInit {
       .get<any[]>('doctors')
       .pipe(
         map((rows) => this.doctorState.normalizeDoctorRows(rows)),
+        tap(() => this.loadErrors.delete('doctors')),
         catchError((error: unknown) => {
-          console.warn('Failed to load doctors:', error);
+          this.loadErrors.add('doctors');
           return of([] as Doctor[]);
         }),
         finalize(() => this.doctorState.setLoading(false))
