@@ -70,7 +70,7 @@
   min-height: 44px;
   border: 1px solid var(--clinic-border);
   border-radius: var(--radius-md);
-  background: var(--white);
+  background: var(--clinic-bg-elevated);
   color: var(--clinic-text-primary);
   text-align: left;
   padding: 0.8rem 0.9rem;
@@ -102,7 +102,7 @@
   border: 1px solid var(--clinic-border);
   border-radius: var(--radius-lg);
   padding: var(--space-2) var(--space-3);
-  background: var(--white);
+  background: var(--clinic-bg-elevated);
 }
 
 .suggestion span {

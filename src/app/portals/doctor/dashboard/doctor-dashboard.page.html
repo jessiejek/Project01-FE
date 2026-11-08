@@ -33,11 +33,11 @@
             </div>
           </div>
 
-          <div class="kpi">
-            <div class="kc k1"><div class="ka"></div><div class="kb"><span class="kl">Booked Today</span><strong class="kv">{{ summary?.bookedToday ?? 0 }}</strong><span class="ks">All appointments</span></div></div>
-            <div class="kc k2"><div class="ka"></div><div class="kb"><span class="kl">Waiting</span><strong class="kv">{{ summary?.waiting ?? 0 }}</strong><span class="ks">In waiting area</span></div></div>
-            <div class="kc k3"><div class="ka"></div><div class="kb"><span class="kl">Checked In</span><strong class="kv">{{ summary?.checkedIn ?? 0 }}</strong><span class="ks">Currently seeing</span></div></div>
-            <div class="kc k4"><div class="ka"></div><div class="kb"><span class="kl">Completed</span><strong class="kv">{{ summary?.completed ?? 0 }}</strong><span class="ks">Done for today</span></div></div>
+          <div class="stats-grid">
+            <app-stat-card color="primary" label="Booked Today" [value]="summary?.bookedToday ?? 0"></app-stat-card>
+            <app-stat-card label="Waiting" [value]="summary?.waiting ?? 0"></app-stat-card>
+            <app-stat-card label="Checked In" [value]="summary?.checkedIn ?? 0"></app-stat-card>
+            <app-stat-card label="Completed" [value]="summary?.completed ?? 0"></app-stat-card>
           </div>
 
           <div class="m">

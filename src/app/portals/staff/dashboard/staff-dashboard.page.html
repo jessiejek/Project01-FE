@@ -7,43 +7,11 @@
         </div>
       </div>
 
-      <div class="stat-grid">
-        <article class="stat-card stat-card--green">
-          <div class="stat-card__accent"></div>
-          <div class="stat-card__body">
-            <p class="stat-card__label">Today's Appointments</p>
-            <div class="stat-card__value">{{ todaysAppointmentsCount }}</div>
-            <p class="stat-card__desc">Scheduled for today</p>
-          </div>
-        </article>
-
-        <article class="stat-card stat-card--red">
-          <div class="stat-card__accent"></div>
-          <div class="stat-card__body">
-            <p class="stat-card__label">Ready for Payment</p>
-            <div class="stat-card__value">{{ completedUnpaidCount }}</div>
-            <p class="stat-card__badge" *ngIf="completedUnpaidCount > 0; else noPayment">Collect Now</p>
-            <ng-template #noPayment><p class="stat-card__desc">All payments collected</p></ng-template>
-          </div>
-        </article>
-
-        <article class="stat-card stat-card--blue">
-          <div class="stat-card__accent"></div>
-          <div class="stat-card__body">
-            <p class="stat-card__label">Walk-Ins Today</p>
-            <div class="stat-card__value">{{ walkInsTodayCount }}</div>
-            <p class="stat-card__desc">Unscheduled arrivals</p>
-          </div>
-        </article>
-
-        <article class="stat-card stat-card--neutral">
-          <div class="stat-card__accent"></div>
-          <div class="stat-card__body">
-            <p class="stat-card__label">Confirmed Today</p>
-            <div class="stat-card__value">{{ confirmedTodayCount }}</div>
-            <p class="stat-card__desc">Checked in to clinic</p>
-          </div>
-        </article>
+      <div class="stats-grid">
+        <app-stat-card color="primary" label="Today's Appointments" [value]="todaysAppointmentsCount" icon="calendar-outline"></app-stat-card>
+        <app-stat-card [color]="completedUnpaidCount > 0 ? 'danger' : 'neutral'" label="Ready for Payment" [value]="completedUnpaidCount" [badgeLabel]="completedUnpaidCount > 0 ? 'Collect payment' : undefined" icon="cash-outline"></app-stat-card>
+        <app-stat-card label="Walk-Ins Today" [value]="walkInsTodayCount"></app-stat-card>
+        <app-stat-card label="Checked In Today" [value]="confirmedTodayCount"></app-stat-card>
       </div>
 
       <div

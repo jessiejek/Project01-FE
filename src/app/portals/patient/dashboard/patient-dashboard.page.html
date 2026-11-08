@@ -53,27 +53,11 @@
         ></app-empty-state>
       </ng-template>
 
-            <div class="stats-grid">
-        <div class="stat-card stat-card--blue">
-          <ion-icon name="calendar-outline" class="stat-card__icon"></ion-icon>
-          <div class="stat-card__value">{{ vm.upcomingCount }}</div>
-          <div class="stat-card__label">Upcoming Appointments</div>
-        </div>
-        <div class="stat-card stat-card--amber">
-          <ion-icon name="receipt-outline" class="stat-card__icon"></ion-icon>
-          <div class="stat-card__value">{{ vm.pendingProofCount }}</div>
-          <div class="stat-card__label">Pending Payment Proof</div>
-        </div>
-        <div class="stat-card stat-card--green">
-          <ion-icon name="checkmark-circle-outline" class="stat-card__icon"></ion-icon>
-          <div class="stat-card__value">{{ vm.completedVisitCount }}</div>
-          <div class="stat-card__label">Completed Visits</div>
-        </div>
-        <div class="stat-card stat-card--red">
-          <ion-icon name="medkit-outline" class="stat-card__icon"></ion-icon>
-          <div class="stat-card__value">{{ vm.activePrescriptionCount }}</div>
-          <div class="stat-card__label">Active Prescriptions</div>
-        </div>
+      <div class="stats-grid">
+        <app-stat-card color="primary" label="Upcoming Appointments" [value]="vm.upcomingCount" icon="calendar-outline"></app-stat-card>
+        <app-stat-card [color]="vm.pendingProofCount > 0 ? 'warning' : 'neutral'" label="Pending Payment Proof" [value]="vm.pendingProofCount" icon="receipt-outline"></app-stat-card>
+        <app-stat-card label="Completed Visits" [value]="vm.completedVisitCount" icon="checkmark-circle-outline"></app-stat-card>
+        <app-stat-card label="Active Prescriptions" [value]="vm.activePrescriptionCount" icon="medkit-outline"></app-stat-card>
       </div>
 
             <div class="dashboard-section">

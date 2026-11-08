@@ -7,7 +7,7 @@
 }
 
 .timer-countdown {
-  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-size: var(--text-lg);
   color: #92400e;
   letter-spacing: 0.05em;

@@ -8,14 +8,14 @@
       </div>
 
       <div class="stats-grid">
-        <app-stat-card color="green" icon="calendar-outline" label="Today's Appointments" [value]="todayAppointmentsCount"></app-stat-card>
-        <app-stat-card color="blue" icon="stats-chart-outline" label="Monthly Appointments" [value]="monthlyAppointmentsCount"></app-stat-card>
-        <app-stat-card color="amber" icon="cash-outline" label="Revenue Today" [value]="(revenueToday | currency:'PHP':'symbol-narrow':'1.0-0') || 'PHP 0'"></app-stat-card>
-        <app-stat-card color="red" icon="alert-circle-outline" label="Pending Verifications" [value]="pendingVerificationCount" badgeLabel="Action Required"></app-stat-card>
-        <app-stat-card color="blue" icon="time-outline" label="On Hold Bookings" [value]="onHoldCount"></app-stat-card>
-        <app-stat-card color="red" icon="warning-outline" label="Unpaid Completed" [value]="unpaidCompletedCount" badgeLabel="Collect Payment"></app-stat-card>
-        <app-stat-card color="gray" icon="person-remove-outline" label="No Shows Today" [value]="noShowCount"></app-stat-card>
-        <app-stat-card color="amber" icon="calendar-outline" label="Follow-Ups (7 days)" [value]="followUpsCount"></app-stat-card>
+        <app-stat-card color="primary" icon="calendar-outline" label="Today's Appointments" [value]="todayAppointmentsCount"></app-stat-card>
+        <app-stat-card color="neutral" icon="stats-chart-outline" label="Monthly Appointments" [value]="monthlyAppointmentsCount"></app-stat-card>
+        <app-stat-card color="neutral" icon="cash-outline" label="Revenue Today" [value]="(revenueToday | currency:'PHP':'symbol-narrow':'1.0-0') || 'PHP 0'"></app-stat-card>
+        <app-stat-card [color]="pendingVerificationCount > 0 ? 'warning' : 'neutral'" icon="alert-circle-outline" label="Pending Verifications" [value]="pendingVerificationCount" [badgeLabel]="pendingVerificationCount > 0 ? 'Action Required' : undefined"></app-stat-card>
+        <app-stat-card color="neutral" icon="time-outline" label="On Hold Bookings" [value]="onHoldCount"></app-stat-card>
+        <app-stat-card [color]="unpaidCompletedCount > 0 ? 'danger' : 'neutral'" icon="warning-outline" label="Unpaid Completed" [value]="unpaidCompletedCount" [badgeLabel]="unpaidCompletedCount > 0 ? 'Collect Payment' : undefined"></app-stat-card>
+        <app-stat-card color="neutral" icon="person-remove-outline" label="No Shows Today" [value]="noShowCount"></app-stat-card>
+        <app-stat-card color="neutral" icon="calendar-outline" label="Follow-Ups (7 days)" [value]="followUpsCount"></app-stat-card>
       </div>
 
       <div class="chart-grid">

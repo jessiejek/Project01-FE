@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { personOutline } from 'ionicons/icons';
+import { personOutline, starOutline } from 'ionicons/icons';
 import { Doctor } from '../../../../core/models';
 import { AvatarComponent } from '../../../../shared/components/avatar/avatar.component';
 import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge.component';
@@ -19,6 +19,6 @@ export class DoctorCardComponent {
   @Input({ required: true }) doctor!: Doctor;
 
   constructor() {
-    addIcons({ personOutline });
+    addIcons({ personOutline, starOutline });
   }
 }

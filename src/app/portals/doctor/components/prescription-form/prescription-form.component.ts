@@ -52,7 +52,7 @@ interface PendingMedicineAction {
       .pf-suggest button:hover{background:var(--color-primary-50)}
       .pf-suggest button span{font-size:var(--text-xs);color:#64748b}
       .pf-preview{background:#f8fafc;border-radius:var(--radius-md);padding:14px 16px;display:grid;gap:4px}
-      .pf-preview__label{font-size:11px;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin:0}
+      .pf-preview__label{font-size:11px;font-weight:600;color: var(--clinic-text-muted);text-transform:uppercase;letter-spacing:.05em;margin:0}
       .pf-preview__medicine{font-size:15px;font-weight:600;color:#1e293b;margin:0}
       .pf-preview__uom{font-weight:400;color:#64748b}
       .pf-preview__sig{font-size:13px;color:#475569;margin:0}
@@ -76,7 +76,7 @@ interface PendingMedicineAction {
       .pf-item-acts button{padding:var(--space-1) var(--space-2);font-size:var(--text-xs);border:1px solid #e2e8f0;border-radius:var(--radius-sm);background:#fff;cursor:pointer;color:#475569}
       .pf-item-acts button:hover{border-color:var(--ion-color-primary);color:var(--ion-color-primary)}
       .pf-remove{color:#dc2626!important}
-      .pf-empty{text-align:center;color:#94a3b8;font-size:var(--text-sm);padding:var(--space-4)}
+      .pf-empty{text-align:center;color: var(--clinic-text-muted);font-size:var(--text-sm);padding:var(--space-4)}
       .pf-banner{border-radius:16px;padding:12px 14px;display:grid;gap:6px;border:1px solid transparent}
       .pf-banner--warn{background:#fffbeb;border-color:#fcd34d;color:#92400e}
       .pf-banner--danger{background:#fef2f2;border-color:#fca5a5;color:#991b1b}

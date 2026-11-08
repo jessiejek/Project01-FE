@@ -1,3 +1,4 @@
+import { StatCardComponent } from '../../../shared/components/stat-card/stat-card.component';
 import { NgFor, NgIf } from '@angular/common';
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
@@ -17,7 +18,7 @@ import { QueueTableComponent } from '../components/queue-table/queue-table.compo
 @Component({
   selector: 'app-staff-dashboard-page',
   standalone: true,
-  imports: [NgFor, NgIf, IonIcon, QueueTableComponent],
+  imports: [StatCardComponent, NgFor, NgIf, IonIcon, QueueTableComponent],
   templateUrl: './staff-dashboard.page.html',
   styleUrl: './staff-dashboard.page.scss'
 })

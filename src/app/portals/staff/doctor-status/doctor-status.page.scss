@@ -9,7 +9,7 @@
 .sb .l{font-size:var(--text-xs);font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:.04em}
 .sb .v{font-size:var(--text-2xl);line-height:1;color:var(--clinic-text-primary)}
 .dg{display:grid;gap:var(--space-4)}
-.er{display:grid;gap:var(--space-3);padding:var(--space-8);text-align:center;color:#94a3b8;background:#fff;border:1px solid #e2e8f0;border-radius:var(--radius-lg)}
+.er{display:grid;gap:var(--space-3);padding:var(--space-8);text-align:center;color: var(--clinic-text-muted);background:#fff;border:1px solid #e2e8f0;border-radius:var(--radius-lg)}
 .er p{margin:0;font-size:var(--text-sm)}
 .er .btn-primary{display:inline-flex;width:auto;margin:0 auto}
 @media(max-width:720px){

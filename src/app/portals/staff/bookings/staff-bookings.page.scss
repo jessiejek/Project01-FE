@@ -90,7 +90,7 @@
   background: #fff;
   border: 1px solid #e2e8f0;
   border-radius: var(--radius-lg);
-  color: #94a3b8;
+  color: var(--clinic-text-muted);
   font-size: 0.9rem;
 }
 
@@ -402,7 +402,7 @@
 .mobile-card__details dt {
   font-size: 0.7rem;
   font-weight: 600;
-  color: #94a3b8;
+  color: var(--clinic-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   flex-shrink: 0;

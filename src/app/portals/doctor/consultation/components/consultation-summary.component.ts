@@ -525,7 +525,7 @@ import { Diagnosis, LabRequest, PrescriptionItem, VitalSigns } from '../../../..
 
     .cs-empty-state {
       padding: 12px 0 2px;
-      color: #94a3b8;
+      color: var(--clinic-text-muted);
       font-style: normal;
       font-size: 0.8rem;
     }

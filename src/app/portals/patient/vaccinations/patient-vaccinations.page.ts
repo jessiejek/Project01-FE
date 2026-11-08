@@ -22,7 +22,7 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state/empt
     .vac-card__notes{border-top:1px solid #e2e8f0;padding-top:var(--space-3);margin-bottom:var(--space-3);display:grid;gap:var(--space-2)}
     .vac-card__notes span{font-size:var(--text-xs);font-weight:600;color:#475569;text-transform:uppercase}
     .vac-card__notes p{font-size:var(--text-sm);margin:2px 0 0;color:#475569}
-    .vac-card__meta span{font-size:var(--text-xs);color:#94a3b8}
+    .vac-card__meta span{font-size:var(--text-xs);color: var(--clinic-text-muted)}
     @media(max-width:640px){.vac-card__header{flex-direction:column}}
   `]
 })

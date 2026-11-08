@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { BaseComponent } from '../../../core/base/base.component';
 import { ClinicDashboardRealtimeService } from '../../../core/services/clinic-dashboard-realtime.service';
 import { TodayAppointmentsTableComponent } from '../components/today-appointments-table/today-appointments-table.component';
-import { StatCardComponent } from '../components/stat-card/stat-card.component';
+import { StatCardComponent } from '../../../shared/components/stat-card/stat-card.component';
 
 @Component({
   selector: 'app-admin-dashboard-page',

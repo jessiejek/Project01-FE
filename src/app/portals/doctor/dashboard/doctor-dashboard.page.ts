@@ -1,3 +1,4 @@
+import { StatCardComponent } from '../../../shared/components/stat-card/stat-card.component';
 import { NgClass, NgFor, NgIf } from '@angular/common';
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -18,7 +19,7 @@ import { StatusBadgeComponent } from '../../../shared/components/status-badge/st
 @Component({
   standalone: true,
   selector: 'app-doctor-dashboard-page',
-  imports: [
+  imports: [StatCardComponent,
     NgClass, NgFor, NgIf, FormsModule, RouterLink,
     AvatarComponent,
     IonSpinner, EmptyStateComponent, StatusBadgeComponent

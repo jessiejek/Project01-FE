@@ -57,7 +57,7 @@ type MediaKind = 'document' | 'lab-result';
       }
 
       .secure-image-container:not(.secure-image-container--preview) .secure-image-error {
-        color: var(--color-text-muted);
+        color: var(--clinic-text-muted);
       }
 
       .secure-image-error ion-icon {

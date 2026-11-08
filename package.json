@@ -14,7 +14,8 @@
     "test:e2e:staff": "playwright test tests/staff",
     "test:e2e:staff:headed": "playwright test tests/staff --headed",
     "test:e2e:staff:debug": "playwright test tests/staff --debug",
-    "test:e2e:report": "playwright show-report"
+    "test:e2e:report": "playwright show-report",
+    "test:design": "node scripts/check-design-system.cjs"
   },
   "private": true,
   "dependencies": {

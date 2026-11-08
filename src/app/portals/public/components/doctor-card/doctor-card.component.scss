@@ -10,8 +10,8 @@
 }
 
 .doctor-card:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+
 }
 
 .doctor-card__avatar {
@@ -80,7 +80,7 @@
 }
 
 .btn-book {
-  background: var(--gradient-card-green);
+  background: var(--ion-color-primary);
   color: white;
   border: none;
   border-radius: var(--radius-md);

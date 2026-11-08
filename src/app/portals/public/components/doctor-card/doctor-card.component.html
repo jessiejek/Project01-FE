@@ -16,7 +16,7 @@
       </div>
       <div class="doctor-card__fee">{{ doctor.consultationFee | peso }}</div>
       <div class="doctor-card__rating">
-        <span class="star" aria-hidden="true">★</span>
+        <ion-icon class="star" name="star-outline" aria-hidden="true"></ion-icon>
         <span>{{ doctor.averageRating ?? '—' }}</span>
         <span>({{ doctor.reviewCount ?? 0 }} reviews)</span>
       </div>

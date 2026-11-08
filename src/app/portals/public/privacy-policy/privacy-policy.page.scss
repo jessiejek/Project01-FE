@@ -9,7 +9,7 @@
 
 .back-link {
   display: inline-block;
-  color: var(--clinic-primary);
+  color: var(--ion-color-primary);
   text-decoration: none;
   font-size: var(--text-sm);
   margin-bottom: var(--space-4);
@@ -53,7 +53,7 @@
 .policy-section__index {
   font-size: var(--text-sm);
   font-weight: var(--font-bold);
-  color: var(--clinic-primary);
+  color: var(--ion-color-primary);
   background: var(--clinic-primary-bg, rgba(93, 62, 142, 0.08));
   border-radius: var(--radius-full, 9999px);
   width: 2rem;

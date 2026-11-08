@@ -38,19 +38,19 @@
 }
 
 .strength-meter__bar.is-active.strength-meter__bar--weak {
-  background: var(--color-danger-500);
+  background: var(--ion-color-danger);
 }
 
 .strength-meter__bar.is-active.strength-meter__bar--fair {
-  background: var(--color-warning-500);
+  background: var(--ion-color-warning);
 }
 
 .strength-meter__bar.is-active.strength-meter__bar--good {
-  background: var(--color-info-500);
+  background: var(--ion-color-secondary);
 }
 
 .strength-meter__bar.is-active.strength-meter__bar--strong {
-  background: var(--color-success-500);
+  background: var(--ion-color-success);
 }
 
 .strength-label {

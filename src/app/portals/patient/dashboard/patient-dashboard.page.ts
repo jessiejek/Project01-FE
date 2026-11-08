@@ -1,3 +1,4 @@
+import { StatCardComponent } from '../../../shared/components/stat-card/stat-card.component';
 import { AsyncPipe, DatePipe, NgFor, NgIf } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
@@ -41,7 +42,7 @@ interface DashboardVm {
 @Component({
     selector: 'app-patient-dashboard-page',
   standalone: true,
-  imports: [
+  imports: [StatCardComponent,
     AsyncPipe,
     DatePipe,
     NgFor,

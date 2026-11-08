@@ -10,7 +10,7 @@
 
       <div class="clinic-card review-card" *ngIf="canReview; else blockedTpl">
         <div class="section-heading">How was your visit?</div>
-        <p *ngIf="submitError" class="error-message" style="color:var(--color-danger);margin-bottom:var(--space-2)">{{ submitError }}</p>
+        <p *ngIf="submitError" class="error-message" style="color:var(--ion-color-danger);margin-bottom:var(--space-2)">{{ submitError }}</p>
         <app-review-form (submitted)="submitReview($event.rating, $event.comment)" [disabled]="isSubmitting"></app-review-form>
       </div>
 

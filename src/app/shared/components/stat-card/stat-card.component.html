@@ -1,0 +1,10 @@
+<article class="stat-card" [ngClass]="'stat-card--' + color" [attr.aria-busy]="loading">
+  <div class="stat-card__heading">
+    <ion-icon *ngIf="icon" class="stat-card__icon" [name]="icon" aria-hidden="true"></ion-icon>
+    <div class="stat-card__label">{{ label }}</div>
+  </div>
+  <div class="stat-card__value">{{ loading ? '—' : value }}</div>
+  <p *ngIf="!loading && badgeLabel" class="stat-card__hint">{{ badgeLabel }}</p>
+  <p *ngIf="description" class="stat-card__description">{{ description }}</p>
+  <span *ngIf="loading" class="sr-only">Loading {{ label }}</span>
+</article>

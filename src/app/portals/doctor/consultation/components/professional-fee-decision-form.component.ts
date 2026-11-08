@@ -62,7 +62,7 @@ export type ProfessionalFeePaymentMode = 'Cash' | 'Card' | 'PayMClinic' | 'HMO' 
         font-size: 0.72rem;
         text-transform: uppercase;
         letter-spacing: 0.04em;
-        color: #94a3b8;
+        color: var(--clinic-text-muted);
         font-weight: 800;
       }
 
