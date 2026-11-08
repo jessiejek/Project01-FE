@@ -6,8 +6,7 @@
 
     <section class="home-section">
       <div class="content-container">
-        <p class="section-heading">Our Specialists</p>
-        <h2 class="section-title">Meet Our Doctors</h2>
+        <h2 class="section-title">Choose Your Doctor</h2>
         <p class="section-subtitle">Experienced professionals dedicated to your health</p>
         <div class="doctors-grid" *ngIf="doctors$ | async as doctors">
           <app-doctor-card *ngFor="let doc of doctors" [doctor]="doc"></app-doctor-card>
@@ -20,8 +19,7 @@
 
     <section class="home-section home-section--alt">
       <div class="content-container">
-        <p class="section-heading">What We Offer</p>
-        <h2 class="section-title">Our Services</h2>
+        <h2 class="section-title">Clinic Services</h2>
         <div class="services-grid" *ngIf="services$ | async as services">
           <app-service-category-card
             *ngFor="let row of categoryRows"
@@ -36,7 +34,6 @@
 
     <section class="home-section">
       <div class="content-container">
-        <p class="section-heading">Latest Updates</p>
         <h2 class="section-title">Clinic Announcements</h2>
         <div class="announcements-grid" *ngIf="announcements$ | async as announcements">
           <app-announcement-card

@@ -78,7 +78,7 @@ ion-app, ion-content {
   --clinic-border-strong: #cbd5e1;
   --clinic-text-primary: #0f172a;
   --clinic-text-secondary: #475569;
-  --clinic-text-muted: #94a3b8;
+  --clinic-text-muted: #64748b;
   --clinic-text-inverse: #ffffff;
 
   /* GRADIENTS */
@@ -1504,4 +1504,11 @@ ion-modal.patient-media-preview-modal {
 
 ion-modal.patient-media-preview-modal::part(content) {
   border-radius: 18px;
+}
+
+/* Readable headings and stable numeric columns. */
+h1, h2, .page-title, .section-title { text-wrap: balance; }
+.stat-card__value, .data-number, .bar-row__value, .booking-timer,
+.receipt-view, .clinic-table td, .slot-cell, input[type='number'] {
+  font-variant-numeric: tabular-nums;
 }

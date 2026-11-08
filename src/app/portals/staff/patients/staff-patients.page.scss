@@ -17,7 +17,7 @@
 .pt tr{cursor:pointer}.pt tr:hover{background:#f8fafc}.pt tr:last-child td{border-bottom:none}
 .pt .pn{font-weight:600;color:#0f172a}
 .pt .pc{font-family:var(--font-mono,monospace);font-size:var(--text-xs);color:#64748b}
-.pt .np{color:#94a3b8;font-style:italic}
+.pt .np{color:#94a3b8;font-style:normal}
 .ml{display:none}
 .mc{display:grid;gap:var(--space-3);padding:var(--space-4);border:1px solid #e2e8f0;border-radius:var(--radius-lg);background:#fff;cursor:pointer;transition:box-shadow .12s}
 .mc:hover{box-shadow:0 3px 10px rgba(0,0,0,.06)}

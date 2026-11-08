@@ -41,11 +41,6 @@ export class DashboardPage extends BaseComponent implements OnInit {
   noShowCount = 0;
   followUpsCount = 0;
   topDoctorStats: Array<{ label: string; value: number; max: number }> = [];
-  revenueLegend: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-  primaryColor = '#5D3E8E';
-  areaLinePath = '';
-  areaFillPath = '';
-  revenueData: number[] = [500, 800, 1200, 900, 1500, 1100, 1800];
 
   ngOnInit(): void {
     this.loadDashboard();
@@ -133,7 +128,6 @@ export class DashboardPage extends BaseComponent implements OnInit {
       const maxCount = sortedDocs.length ? Math.max(...sortedDocs.map((d) => d.count), 1) : 1;
       this.topDoctorStats = sortedDocs.map((d) => ({ label: d.name, value: d.count, max: maxCount }));
 
-      this.buildChartPaths();
       this.isLoading = false;
     },
     error: () => {
@@ -154,14 +148,4 @@ export class DashboardPage extends BaseComponent implements OnInit {
     void this.router.navigate(['/admin/bookings', id]);
   }
 
-  private buildChartPaths(): void {
-    if (!this.revenueData.length) return;
-    const points = this.revenueData.map((value, index) => {
-      const x = (index / (this.revenueData.length - 1)) * 560 + 20;
-      const y = 190 - ((value - 500) / 3000) * 150;
-      return `${x.toFixed(1)},${y.toFixed(1)}`;
-    });
-    this.areaLinePath = `M ${points.join(' L ')}`;
-    this.areaFillPath = `${this.areaLinePath} L 580,200 L 20,200 Z`;
-  }
 }

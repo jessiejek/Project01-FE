@@ -33,6 +33,26 @@
         </div>
       </div>
 
+      <div class="dashboard-section" *ngIf="vm.latestBooking; else noUpcomingTpl">
+        <app-upcoming-appointment-card
+          [booking]="vm.latestBooking"
+          [doctor]="vm.latestBookingDoctor"
+          [canSubmitProof]="canSubmitProof(vm.latestBooking)"
+          [canCancel]="false"
+          (viewDetails)="openBooking($event)"
+          (submitProof)="openBooking($event)"
+        ></app-upcoming-appointment-card>
+      </div>
+      <ng-template #noUpcomingTpl>
+        <app-empty-state
+          icon="calendar-outline"
+          title="No upcoming appointment"
+          description="Your next booking will appear here once it is scheduled."
+          ctaLabel="Browse Doctors"
+          ctaRoute="/patient/doctors"
+        ></app-empty-state>
+      </ng-template>
+
             <div class="stats-grid">
         <div class="stat-card stat-card--blue">
           <ion-icon name="calendar-outline" class="stat-card__icon"></ion-icon>
@@ -74,26 +94,6 @@
           ></app-empty-state>
         </ng-template>
       </div>
-
-      <div class="dashboard-section" *ngIf="vm.latestBooking; else noUpcomingTpl">
-        <app-upcoming-appointment-card
-          [booking]="vm.latestBooking"
-          [doctor]="vm.latestBookingDoctor"
-          [canSubmitProof]="canSubmitProof(vm.latestBooking)"
-          [canCancel]="false"
-          (viewDetails)="openBooking($event)"
-          (submitProof)="openBooking($event)"
-        ></app-upcoming-appointment-card>
-      </div>
-      <ng-template #noUpcomingTpl>
-        <app-empty-state
-          icon="calendar-outline"
-          title="No upcoming appointment"
-          description="Your next booking will appear here once it is scheduled."
-          ctaLabel="Browse Doctors"
-          ctaRoute="/patient/doctors"
-        ></app-empty-state>
-      </ng-template>
 
       <div class="dashboard-grid">
         <div class="dashboard-panel">
